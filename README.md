@@ -43,4 +43,4 @@ docker run -p 8000:8000 compa94   # http://localhost:8000
 
 ## Pour aller plus loin
 
-Méthodologie de nettoyage, décisions techniques, règles métier, schéma SQLite, choix de déploiement → **[ARCHITECTURE.md](ARCHITECTURE.md)**.
+Méthodologie de nettoyage, décisions techniques, règles métier, schéma SQLite, choix de déploiement → **[ARCHITECTURE.md](docs/ARCHITECTURE.md)**.

@@ -8,3 +8,4 @@ etl/data/raw/
 *.log
 .DS_Store
 .playwright-mcp
+CLAUDE.md

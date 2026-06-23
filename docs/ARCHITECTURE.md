@@ -4,7 +4,7 @@
 
 **Démo en ligne :** https://real-estate-94.onrender.com
 
-![Aperçu de l'application](docs/screenshot.jpg)
+![Aperçu de l'application](./image.png)
 
 ## Chiffres clés
 
@@ -30,7 +30,7 @@ download.py  →  clean.py  →  aggregate.py  →  build_db.py
    CSV.gz         filtre        médianes        SQLite
 ```
 
-![Entonnoir de nettoyage](etl/figures/01_entonnoir.png)
+![Entonnoir de nettoyage](../etl/figures/01_entonnoir.png)
 
 > **250 810 lignes brutes → 18 768 ventes exploitables.** Chaque étape retire ce qu'on ne peut pas exploiter pour un €/m² fiable : refus, dédoublonnages de mutations, mutations multi-biens, surface nulle, prix aberrants.
 
@@ -48,7 +48,7 @@ Borne Île-de-France retire ~200 aberrations (saisies manuelles, valeurs symboli
 
 ### Médiane, jamais moyenne
 
-![Distribution prix](etl/figures/04_distribution.png)
+![Distribution prix](../etl/figures/04_distribution.png)
 
 > Distribution asymétrique : moyenne 5 454 €/m² > médiane 5 254 €/m² sur les appartements 2024. La moyenne se laisse tirer vers le haut par les ventes haut-de-gamme — la médiane reflète mieux ce qu'on observe réellement.
 
@@ -66,7 +66,7 @@ Seules **18 communes sur 47** ont ≥ 20 ventes d'appartements en 2024. Sous ce 
 
 ### Écart territorial ×3
 
-![Comparaison communes](etl/figures/02_comparaison_communes.png)
+![Comparaison communes](../etl/figures/02_comparaison_communes.png)
 
 > Du sud-est (Fresnes, Orly, Valenton) au nord-ouest (Saint-Mandé, Vincennes), le €/m² appartement varie d'un facteur 3 sur une zone de 245 km². C'est précisément ce que la choroplèthe rend visible.
 
