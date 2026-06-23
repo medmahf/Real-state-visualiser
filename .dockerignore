@@ -16,8 +16,9 @@ etl/
 .playwright-mcp/
 .claude/
 README.md
-PLAN.md
 CLAUDE.md
+ARCHITECTURE.md
+docs/
 .idea/
 .vscode/
 Dockerfile
