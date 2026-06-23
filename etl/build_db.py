@@ -25,6 +25,16 @@ CREATE TABLE indicateur (
   surface_mediane REAL, prix_m2_p25 REAL, prix_m2_p75 REAL,
   PRIMARY KEY (code_commune, annee, type_bien)
 );
+CREATE TABLE vente (
+  id_mutation TEXT,
+  code_commune TEXT,
+  annee INTEGER,
+  type_bien TEXT,
+  valeur_fonciere REAL,
+  surface_reelle_bati REAL,
+  prix_m2 REAL
+);
+CREATE INDEX idx_vente_lookup ON vente(code_commune, type_bien, annee);
 """
 
 
@@ -36,11 +46,14 @@ def load_cadastre_attrs(path: Path = GEOJSON) -> pd.DataFrame:
 
 
 def main():
-    ind = aggregate(clean(load_raw())).rename(columns={"type_local": "type_bien"})
+    ventes_raw = clean(load_raw())
+    ind = aggregate(ventes_raw).rename(columns={"type_local": "type_bien"})
+    ventes = ventes_raw.rename(columns={"type_local": "type_bien"})
     cad = load_cadastre_attrs()
 
     # DVF lit code_commune en int (ex: 94001) ; le geojson le stocke en str ("94001").
     ind["code_commune"] = ind["code_commune"].astype(str).str.zfill(5)
+    ventes["code_commune"] = ventes["code_commune"].astype(str).str.zfill(5)
     communes = ind[["code_commune", "nom_commune"]].drop_duplicates()
     communes = communes.merge(cad, on="code_commune", how="left")
     communes["nb_parcelles"] = communes["nb_parcelles"].astype("Int64")
@@ -53,6 +66,11 @@ def main():
     if sans_ventes:
         print(f"WARN: communes cadastre sans ventes DVF : {sans_ventes}")
 
+    ventes_db = ventes[[
+        "id_mutation", "code_commune", "annee", "type_bien",
+        "valeur_fonciere", "surface_reelle_bati", "prix_m2",
+    ]]
+
     DB.parent.mkdir(parents=True, exist_ok=True)
     if DB.exists():
         DB.unlink()
@@ -60,9 +78,13 @@ def main():
     con.executescript(SCHEMA)
     communes.to_sql("commune", con, if_exists="append", index=False)
     ind.drop(columns=["nom_commune"]).to_sql("indicateur", con, if_exists="append", index=False)
+    ventes_db.to_sql("vente", con, if_exists="append", index=False)
     con.commit()
     con.close()
-    print(f"data.db ecrit : {len(communes)} communes, {len(ind)} lignes d'indicateurs")
+    print(
+        f"data.db ecrit : {len(communes)} communes, "
+        f"{len(ind)} agregats, {len(ventes_db)} ventes brutes"
+    )
 
 
 if __name__ == "__main__":
